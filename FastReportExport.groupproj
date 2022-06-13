@@ -1,0 +1,120 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{6755DBF6-C824-4AB4-98C6-B52F48E13E16}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="Samples\VCL\VCL.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="Samples\Console\Console.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="Samples\WindowsService\WindowsService.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="Samples\VCLHorse\VCLHorse.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="Samples\ConsoleHorse\ConsoleHorse.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="Samples\WindowsServiceHorse\WindowsServiceHorse.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="Samples\ISAPI\ISAPI.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="Samples\CGI\CGI.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="VCL">
+        <MSBuild Projects="Samples\VCL\VCL.dproj"/>
+    </Target>
+    <Target Name="VCL:Clean">
+        <MSBuild Projects="Samples\VCL\VCL.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="VCL:Make">
+        <MSBuild Projects="Samples\VCL\VCL.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Console">
+        <MSBuild Projects="Samples\Console\Console.dproj"/>
+    </Target>
+    <Target Name="Console:Clean">
+        <MSBuild Projects="Samples\Console\Console.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="Console:Make">
+        <MSBuild Projects="Samples\Console\Console.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="WindowsService">
+        <MSBuild Projects="Samples\WindowsService\WindowsService.dproj"/>
+    </Target>
+    <Target Name="WindowsService:Clean">
+        <MSBuild Projects="Samples\WindowsService\WindowsService.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="WindowsService:Make">
+        <MSBuild Projects="Samples\WindowsService\WindowsService.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="VCLHorse">
+        <MSBuild Projects="Samples\VCLHorse\VCLHorse.dproj"/>
+    </Target>
+    <Target Name="VCLHorse:Clean">
+        <MSBuild Projects="Samples\VCLHorse\VCLHorse.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="VCLHorse:Make">
+        <MSBuild Projects="Samples\VCLHorse\VCLHorse.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="ConsoleHorse">
+        <MSBuild Projects="Samples\ConsoleHorse\ConsoleHorse.dproj"/>
+    </Target>
+    <Target Name="ConsoleHorse:Clean">
+        <MSBuild Projects="Samples\ConsoleHorse\ConsoleHorse.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="ConsoleHorse:Make">
+        <MSBuild Projects="Samples\ConsoleHorse\ConsoleHorse.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="WindowsServiceHorse">
+        <MSBuild Projects="Samples\WindowsServiceHorse\WindowsServiceHorse.dproj"/>
+    </Target>
+    <Target Name="WindowsServiceHorse:Clean">
+        <MSBuild Projects="Samples\WindowsServiceHorse\WindowsServiceHorse.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="WindowsServiceHorse:Make">
+        <MSBuild Projects="Samples\WindowsServiceHorse\WindowsServiceHorse.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="ISAPI">
+        <MSBuild Projects="Samples\ISAPI\ISAPI.dproj"/>
+    </Target>
+    <Target Name="ISAPI:Clean">
+        <MSBuild Projects="Samples\ISAPI\ISAPI.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="ISAPI:Make">
+        <MSBuild Projects="Samples\ISAPI\ISAPI.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="CGI">
+        <MSBuild Projects="Samples\CGI\CGI.dproj"/>
+    </Target>
+    <Target Name="CGI:Clean">
+        <MSBuild Projects="Samples\CGI\CGI.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="CGI:Make">
+        <MSBuild Projects="Samples\CGI\CGI.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="VCL;Console;WindowsService;VCLHorse;ConsoleHorse;WindowsServiceHorse;ISAPI;CGI"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="VCL:Clean;Console:Clean;WindowsService:Clean;VCLHorse:Clean;ConsoleHorse:Clean;WindowsServiceHorse:Clean;ISAPI:Clean;CGI:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="VCL:Make;Console:Make;WindowsService:Make;VCLHorse:Make;ConsoleHorse:Make;WindowsServiceHorse:Make;ISAPI:Make;CGI:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>
