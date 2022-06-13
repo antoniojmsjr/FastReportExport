@@ -213,7 +213,7 @@ begin
 end;
 ```
 
-**Teste de performance para aplicações web usando JMeter:**
+**Teste de performance para aplicações web usando [JMeter](https://jmeter.apache.org/):**
 
 ```
 ..\FastReportExport\Samples\JMeter
