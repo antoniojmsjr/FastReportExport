@@ -130,8 +130,8 @@ var
   lPos: Integer;
 begin
   lPathApp := Self.PathApp;
-  lPos := Pos('FastReportExport', lPathApp);
-  lPathApp := Copy(lPathApp, 1, (lPos + Length('FastReportExport')));
+  lPos := Pos('fastreportexport', LowerCase(lPathApp));
+  lPathApp := IncludeTrailingPathDelimiter(Copy(lPathApp, 1, (lPos + Length('FastReportExport'))));
   Result := lPathApp + 'Samples\DB\FAST_REPORT_EXPORT.FDB';
 end;
 
@@ -141,8 +141,8 @@ var
   lPos: Integer;
 begin
   lPathApp := Self.PathApp;
-  lPos := Pos('FastReportExport', lPathApp);
-  lPathApp := Copy(lPathApp, 1, (lPos + Length('FastReportExport')));
+  lPos := Pos('fastreportexport', LowerCase(lPathApp));
+  lPathApp := IncludeTrailingPathDelimiter(Copy(lPathApp, 1, (lPos + Length('FastReportExport'))));
   Result := lPathApp + 'Samples\Report\rptCliente.fr3';
 end;
 
