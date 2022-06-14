@@ -1,5 +1,6 @@
 ![Maintained YES](https://img.shields.io/badge/Maintained%3F-yes-green.svg?style=flat-square&color=important)
 ![Memory Leak Verified YES](https://img.shields.io/badge/Memory%20Leak%20Verified%3F-yes-green.svg?style=flat-square&color=important)
+![Compatibility](https://img.shields.io/badge/Compatibility-VCL,%20Firemonkey,%20DataSnap,%20Horse,%20RDW,%20RADServer-blue.svg?style=flat-square)
 ![Stars](https://img.shields.io/github/stars/antoniojmsjr/FastReportExport.svg?style=flat-square)
 ![Forks](https://img.shields.io/github/forks/antoniojmsjr/FastReportExport.svg?style=flat-square)
 ![Issues](https://img.shields.io/github/issues/antoniojmsjr/FastReportExport.svg?style=flat-square&color=blue)
