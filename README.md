@@ -12,7 +12,7 @@
 
 Implementado na linguagem Delphi, utiliza o conceito de [fluent interface](https://en.wikipedia.org/wiki/Fluent_interface) para guiar no uso da biblioteca, desenvolvido para exportar relatórios nos formatos PDF, HTML, PNG, entre outros, conforme a necessidade.
 
-**Ambientes**
+**Ambientes testados**
 
 * Windows Forms
 * Windows Console
