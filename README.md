@@ -195,7 +195,7 @@ begin
       lFileStream := TFileStream.Create(lFileExport, fmCreate);
       lFileStream.CopyFrom(lFRExportHTML.Stream, 0);
     finally
-      lFileStream.Free;
+      FreeAndNil(lFileStream);
     end;
   end;
 
@@ -208,7 +208,7 @@ begin
       lFileStream := TFileStream.Create(lFileExport, fmCreate);
       lFileStream.CopyFrom(lFRExportPNG.Stream, 0);
     finally
-      lFileStream.Free;
+     FreeAndNil(lFileStream);
     end;
   end;
 end;
