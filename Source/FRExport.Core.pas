@@ -29,10 +29,13 @@ interface
 uses
   System.Classes, System.Generics.Collections, System.Win.ComObj, Vcl.ExtCtrls,
   frxClass, frxDBSet, frxExportPDF, frxExportHTML, frxExportImage, frxExportCSV,
-  frxExportRTF, frxChart, frxBarcode, frxOLE, frxRich, frxGaugeView, frxCross,
-  frxMap, frxCellularTextObject, frxZipCode, frxGradient, frxDMPExport, frxCrypt,
-  frxChBox, frxTableObject, frxGaugePanel, Data.DB,
-  FRExport.Types, FRExport.Interfaces, FRExport.Interfaces.Providers;
+  frxExportRTF, frxChart, frxBarcode, frxOLE, frxRich, frxCross,
+  frxGradient, frxDMPExport, frxCrypt, frxChBox,
+
+  //ESSA LINHA PODE SER COMENTADA QUANDO A VERSÃO DO FAST REPORT NÃO DÁ SUPORTE
+  frxGaugeView, frxMap, frxCellularTextObject, frxZipCode, frxTableObject, frxGaugePanel,
+
+  Data.DB, FRExport.Types, FRExport.Interfaces, FRExport.Interfaces.Providers;
 
 type
   TFRExportDataSets = class;
@@ -66,7 +69,7 @@ type
   private
     { private declarations }
     [Weak] //NÃO INCREMENTA O CONTADOR DE REFERÊNCIA
-    FFRExport: IFRExport;
+    FParent: IFRExport;
     FFrxReport: TfrxReport;
     FListFrxDBDataset: TObjectList<TfrxDBDataset>;
     function GetEnd: IFRExport;
@@ -86,7 +89,7 @@ type
   private
     { private declarations }
     [Weak] //NÃO INCREMENTA O CONTADOR DE REFERÊNCIA
-    FFRExport: IFRExport;
+    FParent: IFRExport;
     FFrxReport: TfrxReport;
     FListProviders: TList<IFRExportProvider>;
 
@@ -115,13 +118,11 @@ type
     procedure ConfigReportComponent;
   protected
     { protected declarations }
-    [Weak] //NÃO INCREMENTA O CONTADOR DE REFERÊNCIA
-    FFRExport: IFRExport;
     FFRExportProviders: TFRExportProviders;
     FFrxReport: TfrxReport;
   public
     { public declarations }
-    constructor Create(pParent: IFRExport; pFRExportProviders: TFRExportProviders;
+    constructor Create(pFRExportProviders: TFRExportProviders;
                        pFrxReport: TfrxReport);
   end;
   {$ENDREGION}
@@ -265,7 +266,7 @@ begin
   FFRExportDataSetsInterf := TFRExportDataSets.Create(Self, FFrxReport);
   FFRExportProviders := TFRExportProviders.Create(Self, FFrxReport);
   FFRExportProvidersInterf := FFRExportProviders;
-  FFRExportExecuteInterf := TFRExportExecute.Create(Self, FFRExportProviders, FFrxReport);
+  FFRExportExecuteInterf := TFRExportExecute.Create(FFRExportProviders, FFrxReport);
 end;
 
 destructor TFRExportCustom.Destroy;
@@ -294,7 +295,11 @@ end;
 constructor TFRExportDataSets.Create(pParent: IFRExport;
   pFrxReport: TfrxReport);
 begin
-  FFRExport := pParent;
+  FParent := pParent;
+  {$IF COMPILERVERSION <= 30} //Delphi 10 Seattle / C++Builder 10 Seattle
+  FParent._Release;
+  {$ENDIF}
+
   FFrxReport := pFrxReport;
   FFrxReport.DataSets.Clear;
   FFrxReport.EnabledDataSets.Clear;
@@ -311,7 +316,7 @@ end;
 
 function TFRExportDataSets.GetEnd: IFRExport;
 begin
-  Result := FFRExport;
+  Result := FParent;
 end;
 
 function TFRExportDataSets.SetDataSet(
@@ -350,7 +355,10 @@ end;
 constructor TFRExportProviders.Create(pParent: IFRExport;
   pFrxReport: TfrxReport);
 begin
-  FFRExport := pParent;
+  FParent := pParent;
+  {$IF COMPILERVERSION <= 30} //Delphi 10 Seattle / C++Builder 10 Seattle
+  FParent._Release;
+  {$ENDIF}
   FFrxReport := pFrxReport;
   FListProviders := TList<IFRExportProvider>.Create;
 end;
@@ -363,7 +371,7 @@ end;
 
 function TFRExportProviders.GetEnd: IFRExport;
 begin
-  Result := FFRExport;
+  Result := FParent;
 end;
 
 function TFRExportProviders.SetProvider(
@@ -375,10 +383,9 @@ end;
 {$ENDREGION}
 
 {$REGION 'TFRExportExecuteCustom'}
-constructor TFRExportExecuteCustom.Create(pParent: IFRExport;
-  pFRExportProviders: TFRExportProviders; pFrxReport: TfrxReport);
+constructor TFRExportExecuteCustom.Create(pFRExportProviders: TFRExportProviders;
+  pFrxReport: TfrxReport);
 begin
-  FFRExport := pParent;
   FFRExportProviders := pFRExportProviders;
   FFrxReport := pFrxReport;
 
