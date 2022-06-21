@@ -46,13 +46,13 @@ Se você optar por instalar manualmente, basta adicionar as seguintes pastas ao 
 
 **Provider** é uma interface utilizada pela biblioteca para exportação dos relatórios que disponibiliza as classes **TfrxCustomExportFilter** para configuração, e pode ser extendida para implementação de outros formatos de arquivo.
 
-| Arquivo | Provedor |
-|---|---|
-| PDF | IFRExportPDF |
-| HTML | IFRExportHTML |
-| PNG | IFRExportPNG |
-| CSV | IFRExportCSV |
-| RTF | IFRExportRTF |
+| Arquivo | Provedor | TfrxCustomExportFilter |
+|---|---|---|
+| PDF | IFRExportPDF | TfrxPDFExport |
+| HTML | IFRExportHTML | TfrxHTMLExport |
+| PNG | IFRExportPNG | TfrxPNGExport |
+| CSV | IFRExportCSV | TfrxCSVExport |
+| RTF | IFRExportRTF | TfrxRTFExport |
 
 **Exemplo**
 
@@ -64,11 +64,12 @@ var
 begin
 
   //PROVIDER PDF
-  lFRExportPDF := TFRExportProviderPDF.New;
+  lFRExportPDF := TFRExportProviderPDF.New; 
   lFRExportPDF.frxPDF.Subject := 'Samples Fast Report Export';
   lFRExportPDF.frxPDF.Author := 'Antônio José Medeiros Schneider';
 
   //PROVIDER HTML
+  
   lFRExportHTML := TFRExportProviderHTML.New;
 
   //PROVIDER PNG
@@ -216,7 +217,7 @@ begin
 end;
 ```
 
-**Teste de performance para aplicações web usando [JMeter](https://jmeter.apache.org/):**
+**Teste de desempenho para aplicações web usando [JMeter](https://jmeter.apache.org/):**
 
 ```
 ..\FastReportExport\Samples\JMeter
