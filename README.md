@@ -44,7 +44,7 @@ Se você optar por instalar manualmente, basta adicionar as seguintes pastas ao 
 
 ## 🧬 Provedores de Exportação
 
-**Providers** é uma interface utilizada pela biblioteca para exportação dos relatórios e pode ser extendida para implementação de outros formatos de arquivo.
+**Provider** é uma interface utilizada pela biblioteca para exportação dos relatórios que disponibiliza as classes **TfrxCustomExportFilter** para configuração, e pode ser extendida para implementação de outros formatos de arquivo.
 
 | Arquivo | Provedor |
 |---|---|
