@@ -69,7 +69,6 @@ begin
   lFRExportPDF.frxPDF.Author := 'Antônio José Medeiros Schneider';
 
   //PROVIDER HTML
-  
   lFRExportHTML := TFRExportProviderHTML.New;
 
   //PROVIDER PNG
