@@ -34,6 +34,7 @@ uses
 
   //ESSA LINHA PODE SER COMENTADA QUANDO A VERSÃO DO FAST REPORT NÃO DÁ SUPORTE
   frxGaugeView, frxMap, frxCellularTextObject, frxZipCode, frxTableObject, frxGaugePanel,
+  frxADOComponents, frxDBXComponents, frxIBXComponents,
 
   Data.DB, FRExport.Types, FRExport.Interfaces, FRExport.Interfaces.Providers;
 
