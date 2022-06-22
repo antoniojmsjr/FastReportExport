@@ -652,7 +652,7 @@ begin
 end;
 {$ENDREGION}
 
-{$REGION 'TFRExportProviderPNGCustom'}
+{$REGION 'TFRExportProviderCSVCustom'}
 constructor TFRExportProviderCSVCustom.Create;
 begin
   inherited Create;
