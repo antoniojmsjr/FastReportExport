@@ -223,6 +223,13 @@ begin
 end;
 ```
 
+**Exemplo compilado**
+
+* VCL
+* VCL Horse
+
+Download: [Demo.zip](https://github.com/antoniojmsjr/FastReportExport/files/9128777/Demo.zip)
+
 **Teste de desempenho para aplicações web usando [JMeter](https://jmeter.apache.org/):**
 
 ```
