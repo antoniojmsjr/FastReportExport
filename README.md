@@ -93,6 +93,8 @@ end;
 
 Para exemplificar o uso do biblioteca foi utilizado os dados da **[API de localidades do IBGE](https://servicodados.ibge.gov.br/api/docs/localidades)** para exportação.
 
+![image](https://user-images.githubusercontent.com/20980984/179429098-18758c18-3009-43cc-9136-24604e11e62f.png)
+
 Os exemplos estão disponíveis na pasta do projeto:
 
 ```
