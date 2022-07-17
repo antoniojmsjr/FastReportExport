@@ -3,7 +3,8 @@ program VCLHorse;
 uses
   Vcl.Forms,
   Main in 'Main.pas' {frmMain},
-  Utils in '..\Utils\Utils.pas';
+  Utils in '..\Utils\Utils.pas',
+  Data in '..\Utils\Data.pas';
 
 {$R *.res}
 

@@ -143,7 +143,7 @@ begin
   lPathApp := Self.PathApp;
   lPos := Pos('fastreportexport', LowerCase(lPathApp));
   lPathApp := IncludeTrailingPathDelimiter(Copy(lPathApp, 1, (lPos + Length('FastReportExport'))));
-  Result := lPathApp + 'Samples\Report\rptCliente.fr3';
+  Result := lPathApp + 'Samples\Report\rptLocalidadesIBGE.fr3';
 end;
 
 class function TUtils.PathAppFile: string;

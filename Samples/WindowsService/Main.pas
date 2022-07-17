@@ -11,7 +11,7 @@ uses
   FireDAC.Stan.Param, FireDAC.DatS, FireDAC.DApt.Intf, FireDAC.DApt,
   FireDAC.Comp.DataSet, frxClass,
   FRExport, FRExport.Interfaces, FRExport.Interfaces.Providers, FRExport.Types, //FRExport Classes
-  Utils;
+  Utils, Data;
 
 type
   TsrvFastReport = class(TService)
@@ -43,25 +43,28 @@ end;
 procedure TsrvFastReport.ServiceStart(Sender: TService; var Started: Boolean);
 var
   lFDConnection: TFDConnection;
-  lQryCliente: TFDQuery;
-  lError: string;
+  lQryEstadosBrasil: TFDQuery;
+  lQryMunicipioEstado: TFDQuery;
+  lQryMunicipioRegiao: TFDQuery;
+  lQryEstadoRegiao: TFDQuery;
+  lQryMunicipios: TFDQuery;
   lFRExportPDF: IFRExportPDF;
   lFRExportHTML: IFRExportHTML;
   lFRExportPNG: IFRExportPNG;
   lFileStream: TFileStream;
   lFileExport: string;
+  lError: string;
 begin
   Started := True;
+  ReportStatus;
+
   Sleep(1000);
 
   LogMessage('Exportar PDF/HTML/PNG Fast Report.', EVENTLOG_INFORMATION_TYPE, 0, 1050);
 
   lFDConnection := nil;
-  lQryCliente := nil;
   try
     lFDConnection := TFDConnection.Create(nil);
-    lQryCliente := TFDQuery.Create(lFDConnection);
-    lQryCliente.Connection := lFDConnection;
 
     //CONEXÃO COM O BANCO DE DADOS DE EXEMPLO
     if not TUtils.ConnectDB('127.0.0.1', TUtils.PathAppFileDB, lFDConnection, lError) then
@@ -70,11 +73,19 @@ begin
       Exit;
     end;
 
-    //SELECT TABELA CLIENTE
-    if not TUtils.QueryOpen(lQryCliente, 'SELECT * FROM CLIENTE', lError) then
-    begin
-      LogMessage('Erro de consulta: ' + lError, EVENTLOG_ERROR_TYPE, 0, 1050);
-      Exit;
+    //CONSULTA BANCO DE DADOS
+    try
+      TData.QryEstadosBrasil(lFDConnection, lQryEstadosBrasil);
+      TData.QryMunicipioEstado(lFDConnection, lQryMunicipioEstado);
+      TData.QryMunicipioRegiao(lFDConnection, lQryMunicipioRegiao);
+      TData.QryEstadoRegiao(lFDConnection, lQryEstadoRegiao);
+      TData.QryMunicipios(lFDConnection, lQryMunicipios);
+    except
+      on E: Exception do
+      begin
+        LogMessage(E.Message, EVENTLOG_ERROR_TYPE, 0, 1050);
+        Exit;
+      end;
     end;
 
     //EXPORT PDF/HTML/PNG
@@ -87,15 +98,21 @@ begin
 
     //PROVIDER HTML
     lFRExportHTML := TFRExportProviderHTML.New;
+    lFRExportHTML.frxHTML.FixedWidth := True;
 
     //PROVIDER PNG
     lFRExportPNG := TFRExportProviderPNG.New;
+    lFRExportPNG.frxPNG.JPEGQuality := 100;
 
     //CLASSE DE EXPORTAÇÃO
     try
       TFRExport.New.
       DataSets.
-        SetDataSet(lQryCliente, 'DataSetCliente').
+        SetDataSet(lQryEstadosBrasil, 'EstadosBrasil').
+        SetDataSet(lQryMunicipioEstado, 'MunicipioEstado').
+        SetDataSet(lQryMunicipioRegiao, 'MunicipioRegiao').
+        SetDataSet(lQryEstadoRegiao, 'EstadoRegiao').
+        SetDataSet(lQryMunicipios, 'Municipios').
       &End.
       Providers.
         SetProvider(lFRExportPDF).
@@ -117,10 +134,10 @@ begin
           if Assigned(lfrxComponent) then
           begin
             lfrxMemoView.Memo.Clear;
-            lfrxMemoView.Memo.Text := 'WINDOWS SERVICE';
+            lfrxMemoView.Memo.Text := Format('Aplicativo de Exemplo: %s', ['WINDOWS SERVICE']);
           end;
         end).
-        Execute;
+        Execute; //PROCESSAMENTO DO RELATÓRIO
     except
       on E: Exception do
       begin
@@ -139,7 +156,7 @@ begin
     begin
       lFileStream := nil;
       try
-        lFileExport := Format('%s%s', [TUtils.PathApp, 'Cliente.pdf']);
+        lFileExport := Format('%s%s', [TUtils.PathApp, 'LocalidadesIBGE.pdf']);
         lFileStream := TFileStream.Create(lFileExport, fmCreate);
         lFileStream.CopyFrom(lFRExportPDF.Stream, 0);
       finally
@@ -152,7 +169,7 @@ begin
     begin
       lFileStream := nil;
       try
-        lFileExport := Format('%s%s', [TUtils.PathApp, 'Cliente.html']);
+        lFileExport := Format('%s%s', [TUtils.PathApp, 'LocalidadesIBGE.html']);
         lFileStream := TFileStream.Create(lFileExport, fmCreate);
         lFileStream.CopyFrom(lFRExportHTML.Stream, 0);
       finally
@@ -165,7 +182,7 @@ begin
     begin
       lFileStream := nil;
       try
-        lFileExport := Format('%s%s', [TUtils.PathApp, 'Cliente.png']);
+        lFileExport := Format('%s%s', [TUtils.PathApp, 'LocalidadesIBGE.png']);
         lFileStream := TFileStream.Create(lFileExport, fmCreate);
         lFileStream.CopyFrom(lFRExportPNG.Stream, 0);
       finally
@@ -173,8 +190,8 @@ begin
       end;
     end;
 
+    LogMessage('Relatório exportado com sucesso.', EVENTLOG_INFORMATION_TYPE, 0, 1050);
   finally
-    lQryCliente.Close;
     lFDConnection.Free;
   end;
 end;

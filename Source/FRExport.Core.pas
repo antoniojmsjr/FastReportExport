@@ -398,7 +398,7 @@ begin
   //A classe TfrxEngineOptions representa um conjunto de propriedades relacionadas ao mecanismo FastReport. A instância desta classe é armazenada no TfrxReport.EngineOptions
 
   //Define se o relatório é matricial. Ao definir esta propriedade como True, o relatório pode conter páginas matriciais (TfrxDMPPage) e objetos. Não defina esta propriedade diretamente. Use o item de menu "Arquivo|Novo..." para criar relatórios matriciais.
-  FFrxReport.DotMatrixReport := False;
+  //FFrxReport.DotMatrixReport := False;
 
   FFrxReport.EngineOptions.Clear;
 
@@ -412,7 +412,10 @@ begin
   FFrxReport.EngineOptions.UseGlobalDataSetList := False;
 
   //Define se é necessário usar o cache de páginas de relatório em um arquivo (consulte a propriedade "MaxMemSize"). O valor padrão é Falso.
-  FFrxReport.EngineOptions.UseFileCache := false;
+  FFrxReport.EngineOptions.UseFileCache := False;
+
+  //O tamanho máximo de memória em Mbytes, alocado para o cache das páginas do relatório. Torna-se útil nos casos em que a propriedade "UseFileCache" é igual a "True". Se um relatório começar a ocupar mais memória durante a construção, o cache das páginas de relatório construídas em um arquivo temporário é executado. Esta propriedade é inexata e permite apenas a determinação aproximada do limite de memória. O valor padrão é 10.
+  //FFrxReport.EngineOptions.MaxMemSize
 
   //Preterido (consulte NewSilentMode). "Modo silencioso. Quando ocorrerem erros durante o carregamento ou execução do relatório, nenhuma janela de diálogo será exibida.
   //Todos os erros estarão contidos no TfrxReport. Propriedade de erros. Este modo é útil para aplicativos de servidor. O valor padrão é Falso.
@@ -488,9 +491,6 @@ var
   lFRExportProviderInterf: IFRExportProvider;
 begin
   Sleep(1);
-
-  //PARA EVITAR O ERRO * Dataset "xxxxxxx" does not exist
-  //FFrxReport.LoadFromFile(FFrxReport.FileName);
 
   //PREPARE REPORT
   if not FFrxReport.PrepareReport(False) then

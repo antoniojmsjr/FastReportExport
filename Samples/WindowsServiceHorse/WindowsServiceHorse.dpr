@@ -3,7 +3,8 @@ program WindowsServiceHorse;
 uses
   Vcl.SvcMgr,
   Main in 'Main.pas' {srvFastReportHorse: TService},
-  Utils in '..\Utils\Utils.pas';
+  Utils in '..\Utils\Utils.pas',
+  Data in '..\Utils\Data.pas';
 
 {$R *.RES}
 

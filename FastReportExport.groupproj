@@ -6,6 +6,9 @@
         <Projects Include="Samples\VCL\VCL.dproj">
             <Dependencies/>
         </Projects>
+        <Projects Include="Samples\FMX\FMX.dproj">
+            <Dependencies/>
+        </Projects>
         <Projects Include="Samples\Console\Console.dproj">
             <Dependencies/>
         </Projects>
@@ -27,9 +30,6 @@
         <Projects Include="Samples\CGI\CGI.dproj">
             <Dependencies/>
         </Projects>
-        <Projects Include="Samples\FMX\FMX.dproj">
-            <Dependencies/>
-        </Projects>
     </ItemGroup>
     <ProjectExtensions>
         <Borland.Personality>Default.Personality.12</Borland.Personality>
@@ -46,6 +46,15 @@
     </Target>
     <Target Name="VCL:Make">
         <MSBuild Projects="Samples\VCL\VCL.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="FMX">
+        <MSBuild Projects="Samples\FMX\FMX.dproj"/>
+    </Target>
+    <Target Name="FMX:Clean">
+        <MSBuild Projects="Samples\FMX\FMX.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="FMX:Make">
+        <MSBuild Projects="Samples\FMX\FMX.dproj" Targets="Make"/>
     </Target>
     <Target Name="Console">
         <MSBuild Projects="Samples\Console\Console.dproj"/>
@@ -110,23 +119,14 @@
     <Target Name="CGI:Make">
         <MSBuild Projects="Samples\CGI\CGI.dproj" Targets="Make"/>
     </Target>
-    <Target Name="FMX">
-        <MSBuild Projects="Samples\FMX\FMX.dproj"/>
-    </Target>
-    <Target Name="FMX:Clean">
-        <MSBuild Projects="Samples\FMX\FMX.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="FMX:Make">
-        <MSBuild Projects="Samples\FMX\FMX.dproj" Targets="Make"/>
-    </Target>
     <Target Name="Build">
-        <CallTarget Targets="VCL;Console;WindowsService;VCLHorse;ConsoleHorse;WindowsServiceHorse;ISAPI;CGI;FMX"/>
+        <CallTarget Targets="VCL;FMX;Console;WindowsService;VCLHorse;ConsoleHorse;WindowsServiceHorse;ISAPI;CGI"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="VCL:Clean;Console:Clean;WindowsService:Clean;VCLHorse:Clean;ConsoleHorse:Clean;WindowsServiceHorse:Clean;ISAPI:Clean;CGI:Clean;FMX:Clean"/>
+        <CallTarget Targets="VCL:Clean;FMX:Clean;Console:Clean;WindowsService:Clean;VCLHorse:Clean;ConsoleHorse:Clean;WindowsServiceHorse:Clean;ISAPI:Clean;CGI:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="VCL:Make;Console:Make;WindowsService:Make;VCLHorse:Make;ConsoleHorse:Make;WindowsServiceHorse:Make;ISAPI:Make;CGI:Make;FMX:Make"/>
+        <CallTarget Targets="VCL:Make;FMX:Make;Console:Make;WindowsService:Make;VCLHorse:Make;ConsoleHorse:Make;WindowsServiceHorse:Make;ISAPI:Make;CGI:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>

@@ -190,6 +190,7 @@
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
         <DCCReference Include="..\Utils\Utils.pas"/>
+        <DCCReference Include="..\Utils\Data.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
@@ -232,7 +233,7 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="Win32\Debug\Console.exe" Configuration="Debug" Class="ProjectOutput">
+                <DeployFile LocalName="Bin\Console.exe" Configuration="Debug" Class="ProjectOutput">
                     <Platform Name="Win32">
                         <RemoteName>Console.exe</RemoteName>
                         <Overwrite>true</Overwrite>

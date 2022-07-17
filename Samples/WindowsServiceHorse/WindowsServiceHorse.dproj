@@ -177,6 +177,7 @@
             <DesignClass>TService</DesignClass>
         </DCCReference>
         <DCCReference Include="..\Utils\Utils.pas"/>
+        <DCCReference Include="..\Utils\Data.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
@@ -205,6 +206,12 @@
             </Delphi.Personality>
             <Deployment Version="3">
                 <DeployFile LocalName="Win32\Debug\WindowsServiceHorse.exe" Configuration="Debug" Class="ProjectOutput">
+                    <Platform Name="Win32">
+                        <RemoteName>WindowsServiceHorse.exe</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Bin\WindowsServiceHorse.exe" Configuration="Release" Class="ProjectOutput">
                     <Platform Name="Win32">
                         <RemoteName>WindowsServiceHorse.exe</RemoteName>
                         <Overwrite>true</Overwrite>

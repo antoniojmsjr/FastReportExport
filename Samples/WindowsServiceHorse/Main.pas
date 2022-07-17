@@ -11,7 +11,7 @@ uses
   FireDAC.Stan.Param, FireDAC.DatS, FireDAC.DApt.Intf, FireDAC.DApt,
   FireDAC.Comp.DataSet, frxClass, System.StrUtils,
   FRExport, FRExport.Interfaces, FRExport.Interfaces.Providers, FRExport.Types, //FRExport Classes
-  Utils, Horse, Horse.StaticFiles;
+  Utils, Data, Horse, Horse.StaticFiles;
 
 type
   TsrvFastReportHorse = class(TService)
@@ -49,22 +49,21 @@ procedure TsrvFastReportHorse.ExportFastReport(pReq: THorseRequest;
   pRes: THorseResponse; pNext: TNextProc);
 var
   lFDConnection: TFDConnection;
-  lQryCliente: TFDQuery;
-  lError: string;
+  lQryEstadosBrasil: TFDQuery;
+  lQryMunicipioEstado: TFDQuery;
+  lQryMunicipioRegiao: TFDQuery;
+  lQryEstadoRegiao: TFDQuery;
+  lQryMunicipios: TFDQuery;
   lFRExportPDF: IFRExportPDF;
-  lFRExportHTML: IFRExportHTML;
-  lFRExportPNG: IFRExportPNG;
   lFileStream: TFileStream;
+  lError: string;
   lFileExportPDF: string;
-  lFileExportHTML: string;
-  lFileExportPNG: string;
+  lFiltro: Integer;
 begin
+  lFiltro := pReq.Params.Field('estadoid').AsInteger;
   lFDConnection := nil;
-  lQryCliente := nil;
   try
     lFDConnection := TFDConnection.Create(nil);
-    lQryCliente := TFDQuery.Create(lFDConnection);
-    lQryCliente.Connection := lFDConnection;
 
     //CONEXÃO COM O BANCO DE DADOS DE EXEMPLO
     if not TUtils.ConnectDB('127.0.0.1', TUtils.PathAppFileDB, lFDConnection, lError) then
@@ -73,14 +72,22 @@ begin
       Exit;
     end;
 
-    //SELECT TABELA CLIENTE
-    if not TUtils.QueryOpen(lQryCliente, 'SELECT * FROM CLIENTE', lError) then
-    begin
-      pRes.Send('Erro de consulta: ' + lError).Status(500);
-      Exit;
+    //CONSULTA BANCO DE DADOS
+    try
+      TData.QryEstadosBrasil(lFDConnection, lQryEstadosBrasil);
+      TData.QryMunicipioEstado(lFDConnection, lQryMunicipioEstado);
+      TData.QryMunicipioRegiao(lFDConnection, lQryMunicipioRegiao);
+      TData.QryEstadoRegiao(lFDConnection, lQryEstadoRegiao);
+      TData.QryMunicipios(lFDConnection, lQryMunicipios, lFiltro);
+    except
+      on E: Exception do
+      begin
+        pRes.Send(E.Message).Status(500);
+        Exit;
+      end;
     end;
 
-    //EXPORT PDF/HTML/PNG
+    //EXPORT
 
     //PROVIDER PDF
     lFRExportPDF := TFRExportProviderPDF.New;
@@ -88,43 +95,39 @@ begin
     lFRExportPDF.frxPDF.Author := 'Antônio José Medeiros Schneider';
     lFRExportPDF.frxPDF.Creator := 'Antônio José Medeiros Schneider';
 
-    //PROVIDER HTML
-    lFRExportHTML := TFRExportProviderHTML.New;
-
-    //PROVIDER PNG
-    lFRExportPNG := TFRExportProviderPNG.New;
-
     //CLASSE DE EXPORTAÇÃO
     try
       TFRExport.New.
       DataSets.
-        SetDataSet(lQryCliente, 'DataSetCliente').
+        SetDataSet(lQryEstadosBrasil, 'EstadosBrasil').
+        SetDataSet(lQryMunicipioEstado, 'MunicipioEstado').
+        SetDataSet(lQryMunicipioRegiao, 'MunicipioRegiao').
+        SetDataSet(lQryEstadoRegiao, 'EstadoRegiao').
+        SetDataSet(lQryMunicipios, 'Municipios').
       &End.
       Providers.
         SetProvider(lFRExportPDF).
-        SetProvider(lFRExportHTML).
-        SetProvider(lFRExportPNG).
       &End.
       Export.
         SetExceptionFastReport(True).
-        SetFileReport(TUtils.PathAppFileReport).
-        Report(procedure(pfrxReport: TfrxReport)
-          var
-            lfrxComponent: TfrxComponent;
-            lfrxMemoView: TfrxMemoView absolute lfrxComponent;
-          begin
-            //CONFIGURAÇÃO DO COMPONENTE
-            pfrxReport.ReportOptions.Author := 'Antônio José Medeiros Schneider';
+        SetFileReport(TUtils.PathAppFileReport). //LOCAL DO RELATÓRIO *.fr3
+        Report(procedure(pfrxReport: TfrxReport) //CONFIGURAÇÃO DO COMPONENTE DE RELATÓRIO DO FAST REPORT
+        var
+          lfrxComponent: TfrxComponent;
+          lfrxMemoView: TfrxMemoView absolute lfrxComponent;
+        begin
+          //CONFIGURAÇÃO DO COMPONENTE
+          pfrxReport.ReportOptions.Author := 'Antônio José Medeiros Schneider';
 
-            //PASSAGEM DE PARÂMETRO PARA O RELATÓRIO
-            lfrxComponent := pfrxReport.FindObject('mmoProcess');
-            if Assigned(lfrxComponent) then
-            begin
-              lfrxMemoView.Memo.Clear;
-              lfrxMemoView.Memo.Text := 'WINDOWS SERVER HORSE';
-            end;
-          end).
-        Execute;
+          //PASSAGEM DE PARÂMETRO PARA O RELATÓRIO
+          lfrxComponent := pfrxReport.FindObject('mmoProcess');
+          if Assigned(lfrxComponent) then
+          begin
+            lfrxMemoView.Memo.Clear;
+            lfrxMemoView.Memo.Text := Format('Aplicativo de Exemplo: %s', ['WINDOWS SERVER HORSE']);
+          end;
+        end).
+        Execute; //PROCESSAMENTO DO RELATÓRIO
     except
       on E: Exception do
       begin
@@ -137,46 +140,25 @@ begin
     end;
 
     //EXPORT
-    Sleep(10);
+    Sleep(1);
     try
+
       //SALVAR PDF
       if Assigned(lFRExportPDF.Stream) then
       begin
         lFileStream := nil;
         try
-          lFileExportPDF := Format('%s%s.%s', [TUtils.PathApp, GetFileName('Cliente'), 'pdf']);
+          lFileExportPDF := Format('%s%s.%s', [TUtils.PathApp, GetFileName('LocalidadesIBGE'), 'pdf']);
           lFileStream := TFileStream.Create(lFileExportPDF, fmCreate);
           lFileStream.CopyFrom(lFRExportPDF.Stream, 0);
+
+          //ENVIO DO ARQUIVO
+          pRes.SendFile(lFRExportPDF.Stream, 'LocalidadesIBGE.pdf', 'application/pdf');
         finally
           FreeAndNil(lFileStream);
         end;
       end;
 
-      //SALVAR HTML
-      if Assigned(lFRExportHTML.Stream) then
-      begin
-        lFileStream := nil;
-        try
-          lFileExportHTML := Format('%s%s.%s', [TUtils.PathApp, GetFileName('Cliente'), 'html']);
-          lFileStream := TFileStream.Create(lFileExportHTML, fmCreate);
-          lFileStream.CopyFrom(lFRExportHTML.Stream, 0);
-        finally
-          lFileStream.Free;
-        end;
-      end;
-
-      //SALVAR PNG
-      if Assigned(lFRExportPNG.Stream) then
-      begin
-        lFileStream := nil;
-        try
-          lFileExportPNG := Format('%s%s.%s', [TUtils.PathApp, GetFileName('Cliente'), 'png']);
-          lFileStream := TFileStream.Create(lFileExportPNG, fmCreate);
-          lFileStream.CopyFrom(lFRExportPNG.Stream, 0);
-        finally
-          lFileStream.Free;
-        end;
-      end;
     except
       on E: Exception do
       begin
@@ -185,12 +167,7 @@ begin
       end;
     end;
 
-    pRes.
-      Send(TUtils.GetHTML(pReq.RawWebRequest.Host+':'+pReq.RawWebRequest.ServerPort.ToString, lFileExportPDF, lFileExportHTML, lFileExportPNG)).
-      ContentType('text/html; charset=utf-8').
-      Status(200);
   finally
-    lQryCliente.Close;
     lFDConnection.Free;
   end;
 end;
@@ -204,6 +181,7 @@ procedure TsrvFastReportHorse.ServiceStart(Sender: TService;
   var Started: Boolean);
 begin
   Started := True;
+  ReportStatus;
 
   THorse.Use('/', HorseStaticFile(TUtils.PathApp, ['']));
   THorse.MaxConnections := 100;
@@ -215,7 +193,7 @@ begin
     end);
 
   //CERTO É POST, MAS COMO EXEMPLO PARA VISUALIZAR NO BROWSER VAI SER O GET
-  THorse.Get('export', ExportFastreport);
+  THorse.Get('export/:estadoid', ExportFastreport);
 
   THorse.Listen(9002);
 

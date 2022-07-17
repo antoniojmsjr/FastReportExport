@@ -10,21 +10,30 @@ uses
   FireDAC.Stan.Async, FireDAC.DApt, FireDAC.UI.Intf, FireDAC.Stan.Def,
   FireDAC.Stan.Pool, FireDAC.Phys, FireDAC.Phys.FB, FireDAC.Phys.FBDef,
   FireDAC.VCLUI.Wait, FireDAC.Comp.Client, FireDAC.Comp.DataSet, frxClass,
-  Vcl.StdCtrls, Vcl.ExtCtrls, Vcl.Grids, Vcl.DBGrids;
+  Vcl.StdCtrls, Vcl.ExtCtrls, Vcl.Grids, Vcl.DBGrids, frxRich, frxADOComponents,
+  frxDBXComponents, frxIBXComponents, frxDBSet;
 
 type
   TfrmMain = class(TForm)
     frxReport: TfrxReport;
-    qryCliente: TFDQuery;
+    qryMunicipioEstado: TFDQuery;
     conFastReportExport: TFDConnection;
-    dsCliente: TDataSource;
-    DBGrid1: TDBGrid;
     Panel1: TPanel;
-    Button2: TButton;
+    btnConectarDB: TButton;
     btnExportar: TButton;
     ckbExportThread: TCheckBox;
+    frxdbMunicipioEstado: TfrxDBDataset;
+    qryMunicipioRegiao: TFDQuery;
+    frxdbMunicipioRegiao: TfrxDBDataset;
+    qryEstadoRegiao: TFDQuery;
+    frxDBEstadoRegiao: TfrxDBDataset;
+    qryEstadosBrasil: TFDQuery;
+    frxdbEstadosBrasil: TfrxDBDataset;
+    qryMunicipios: TFDQuery;
+    frxdbMunicipios: TfrxDBDataset;
     procedure btnExportarClick(Sender: TObject);
-    procedure Button2Click(Sender: TObject);
+    procedure btnConectarDBClick(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
   private
     { Private declarations }
     procedure ExportThread;
@@ -42,6 +51,33 @@ uses
   System.Generics.Collections, System.Threading;
 
 {$R *.dfm}
+
+procedure TfrmMain.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  conFastReportExport.Close;
+end;
+
+procedure TfrmMain.btnConectarDBClick(Sender: TObject);
+begin
+  conFastReportExport.Open;
+
+  qryEstadosBrasil.Close;
+  qryEstadosBrasil.Open;
+
+  qryMunicipioEstado.Close;
+  qryMunicipioEstado.Open;
+
+  qryMunicipioRegiao.Close;
+  qryMunicipioRegiao.Open;
+
+  qryEstadoRegiao.Close;
+  qryEstadoRegiao.Open;
+
+  qryMunicipios.Close;
+  qryMunicipios.Open;
+
+  btnExportar.Enabled := True;
+end;
 
 procedure TfrmMain.btnExportarClick(Sender: TObject);
 var
@@ -65,6 +101,7 @@ begin
 
   //PROVIDER HTML
   lFRExportHTML := TFRExportProviderHTML.New;
+  lFRExportHTML.frxHTML.FixedWidth := True;
 
   //PROVIDER PNG
   lFRExportPNG := TFRExportProviderPNG.New;
@@ -74,7 +111,11 @@ begin
   try
     TFRExport.New.
       DataSets.
-        SetDataSet(qryCliente, 'DataSetCliente').
+        SetDataSet(qryEstadosBrasil, 'EstadosBrasil').
+        SetDataSet(frxdbMunicipioEstado).
+        SetDataSet(frxdbMunicipioRegiao).
+        SetDataSet(qryEstadoRegiao, 'EstadoRegiao').
+        SetDataSet(qryMunicipios, 'Municipios').
       &End.
       Providers.
         SetProvider(lFRExportPDF).
@@ -84,28 +125,28 @@ begin
       Export.
         SetFileReport(TUtils.PathAppFileReport). //LOCAL DO RELATÓRIO *.fr3
         Report(procedure(pfrxReport: TfrxReport) //CONFIGURAÇÃO DO COMPONENTE DE RELATÓRIO DO FAST REPORT
-          var
-            lfrxComponent: TfrxComponent;
-            lfrxMemoView: TfrxMemoView absolute lfrxComponent;
-          begin
-            pfrxReport.ReportOptions.Author := 'Antônio José Medeiros Schneider';
+        var
+          lfrxComponent: TfrxComponent;
+          lfrxMemoView: TfrxMemoView absolute lfrxComponent;
+        begin
+          pfrxReport.ReportOptions.Author := 'Antônio José Medeiros Schneider';
 
-            //PASSAGEM DE PARÂMETRO PARA O RELATÓRIO
-            lfrxComponent := pfrxReport.FindObject('mmoProcess');
-            if Assigned(lfrxComponent) then
-            begin
-              lfrxMemoView.Memo.Clear;
-              lfrxMemoView.Memo.Text := 'VCL';
-            end;
-          end).
-        Execute; //EXECUTA O PROCESSO DE EXPORTAÇÃO DO RELATÓRIO
+          //PASSAGEM DE PARÂMETRO PARA O RELATÓRIO
+          lfrxComponent := pfrxReport.FindObject('mmoProcess');
+          if Assigned(lfrxComponent) then
+          begin
+            lfrxMemoView.Memo.Clear;
+            lfrxMemoView.Memo.Text := Format('Aplicativo de Exemplo: %s', ['VCL']);
+          end;
+        end).
+        Execute; //PROCESSAMENTO DO RELATÓRIO
   except
     on E: Exception do
     begin
       if E is EFRExport then
-        ShowMessage(E.ToString)
+        ShowMessage('Erro de exportação: ' + E.ToString)
       else
-        ShowMessage(E.Message);
+        ShowMessage('Erro de exportação: ' + E.Message);
       Exit;
     end;
   end;
@@ -115,7 +156,7 @@ begin
   begin
     lFileStream := nil;
     try
-      lFileExport := Format('%s%s', [TUtils.PathApp, 'Cliente.pdf']);
+      lFileExport := Format('%s%s', [TUtils.PathApp, 'LocalidadesIBGE.pdf']);
       lFileStream := TFileStream.Create(lFileExport, fmCreate);
       lFileStream.CopyFrom(lFRExportPDF.Stream, 0);
     finally
@@ -128,7 +169,7 @@ begin
   begin
     lFileStream := nil;
     try
-      lFileExport := Format('%s%s', [TUtils.PathApp, 'Cliente.html']);
+      lFileExport := Format('%s%s', [TUtils.PathApp, 'LocalidadesIBGE.html']);
       lFileStream := TFileStream.Create(lFileExport, fmCreate);
       lFileStream.CopyFrom(lFRExportHTML.Stream, 0);
     finally
@@ -141,23 +182,15 @@ begin
   begin
     lFileStream := nil;
     try
-      lFileExport := Format('%s%s', [TUtils.PathApp, 'Cliente.png']);
+      lFileExport := Format('%s%s', [TUtils.PathApp, 'LocalidadesIBGE.png']);
       lFileStream := TFileStream.Create(lFileExport, fmCreate);
       lFileStream.CopyFrom(lFRExportPNG.Stream, 0);
     finally
       lFileStream.Free;
     end;
   end;
-end;
 
-procedure TfrmMain.Button2Click(Sender: TObject);
-begin
-  conFastReportExport.Open();
-
-  qryCliente.Close;
-  qryCliente.Open();
-
-  btnExportar.Enabled := True;
+  ShowMessage('Ok');
 end;
 
 procedure TfrmMain.ExportThread;
@@ -179,21 +212,27 @@ begin
 
     //PROVIDER PDF
     lFRExportPDF := TFRExportProviderPDF.New;
-    lFRExportPDF.frxPDF.Subject := 'Cliente - Delphi';
+    lFRExportPDF.frxPDF.Subject := 'Samples Fast Report Export';
     lFRExportPDF.frxPDF.Author := 'Antônio José Medeiros Schneider';
     lFRExportPDF.frxPDF.Creator := 'Antônio José Medeiros Schneider';
 
     //PROVIDER HTML
     lFRExportHTML := TFRExportProviderHTML.New;
+    lFRExportHTML.frxHTML.FixedWidth := True;
 
     //PROVIDER PNG
     lFRExportPNG := TFRExportProviderPNG.New;
+    lFRExportPNG.frxPNG.JPEGQuality := 100;
 
     //CLASSE DE EXPORTAÇÃO
     try
       TFRExport.New.
         DataSets.
-          SetDataSet(qryCliente, 'DataSetCliente').
+          SetDataSet(qryEstadosBrasil, 'EstadosBrasil').
+          SetDataSet(frxdbMunicipioEstado).
+          SetDataSet(frxdbMunicipioRegiao).
+          SetDataSet(qryEstadoRegiao, 'EstadoRegiao').
+          SetDataSet(qryMunicipios, 'Municipios').
         &End.
         Providers.
           SetProvider(lFRExportPDF).
@@ -215,7 +254,7 @@ begin
             if Assigned(lfrxComponent) then
             begin
               lfrxMemoView.Memo.Clear;
-              lfrxMemoView.Memo.Text := 'VCL';
+              lfrxMemoView.Memo.Text := Format('Aplicativo de Exemplo: %s', ['VCL']);
             end;
           end).
           Execute;
@@ -235,7 +274,7 @@ begin
       TThread.Synchronize(TThread.Current,
       procedure
       begin
-        ShowMessage(lExportErrorMessage);
+        ShowMessage('Erro de exportação: ' + lExportErrorMessage);
       end);
       Exit;
     end;
@@ -245,7 +284,7 @@ begin
     begin
       lFileStream := nil;
       try
-        lFileExport := Format('%s%s', [TUtils.PathApp, 'Cliente.pdf']);
+        lFileExport := Format('%s%s', [TUtils.PathApp, 'LocalidadesIBGE.pdf']);
         lFileStream := TFileStream.Create(lFileExport, fmCreate);
         lFileStream.CopyFrom(lFRExportPDF.Stream, 0);
       finally
@@ -258,7 +297,7 @@ begin
     begin
       lFileStream := nil;
       try
-        lFileExport := Format('%s%s', [TUtils.PathApp, 'Cliente.html']);
+        lFileExport := Format('%s%s', [TUtils.PathApp, 'LocalidadesIBGE.html']);
         lFileStream := TFileStream.Create(lFileExport, fmCreate);
         lFileStream.CopyFrom(lFRExportHTML.Stream, 0);
       finally
@@ -271,13 +310,19 @@ begin
     begin
       lFileStream := nil;
       try
-        lFileExport := Format('%s%s', [TUtils.PathApp, 'Cliente.png']);
+        lFileExport := Format('%s%s', [TUtils.PathApp, 'LocalidadesIBGE.png']);
         lFileStream := TFileStream.Create(lFileExport, fmCreate);
         lFileStream.CopyFrom(lFRExportPNG.Stream, 0);
       finally
         lFileStream.Free;
       end;
     end;
+
+    TThread.Synchronize(TThread.Current,
+      procedure
+      begin
+        ShowMessage('Ok');
+      end);
   end);
   lTask.Start;
 end;
