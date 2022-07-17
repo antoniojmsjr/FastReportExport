@@ -91,7 +91,7 @@ end;
 
 Para exemplificar o uso do biblioteca foi utilizado os dados da **[API de localidades do IBGE](https://servicodados.ibge.gov.br/api/docs/localidades)** para geração e exportação do relatório.
 
-[LocalidadesIBGE.pdf](https://github.com/antoniojmsjr/FastReportExport/files/9128761/LocalidadesIBGE.pdf)
+Exemplo de exportação: [LocalidadesIBGE.pdf](https://github.com/antoniojmsjr/FastReportExport/files/9128761/LocalidadesIBGE.pdf)
 
 Os exemplos estão disponíveis na pasta do projeto:
 
