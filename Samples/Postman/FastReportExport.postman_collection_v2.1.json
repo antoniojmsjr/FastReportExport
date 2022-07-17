@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "71df9733-cb2e-4fb2-9086-69f7c0d88272",
+		"_postman_id": "7f1185c0-f128-4aac-90c0-6c5c7c82d828",
 		"name": "Fast Report Export",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -22,14 +22,15 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:9000/export",
+					"raw": "http://localhost:9000/export/43",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "9000",
 					"path": [
-						"export"
+						"export",
+						"43"
 					]
 				}
 			},
@@ -52,14 +53,15 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:9001/export",
+					"raw": "http://localhost:9001/export/43",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "9001",
 					"path": [
-						"export"
+						"export",
+						"43"
 					]
 				}
 			},
@@ -82,14 +84,15 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:9002/export",
+					"raw": "http://localhost:9002/export/43",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "9002",
 					"path": [
-						"export"
+						"export",
+						"43"
 					]
 				}
 			},
@@ -112,7 +115,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost/frxexportisapi/ISAPI.dll/export",
+					"raw": "http://localhost/frxexportisapi/ISAPI.dll/export/43",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -120,7 +123,8 @@
 					"path": [
 						"frxexportisapi",
 						"ISAPI.dll",
-						"export"
+						"export",
+						"43"
 					]
 				}
 			},
@@ -143,7 +147,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost/frxexportcgi/cgi.exe/export",
+					"raw": "http://localhost/frxexportcgi/cgi.exe/export/43",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -151,7 +155,8 @@
 					"path": [
 						"frxexportcgi",
 						"cgi.exe",
-						"export"
+						"export",
+						"43"
 					]
 				}
 			},
