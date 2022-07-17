@@ -87,11 +87,9 @@ end;
 | TDataSet | Nativo |
 | TfrxDBDataset | Fast Report |
 
-## ⚡️ Uso
+## ⚡️ Uso da biblioteca
 
-#### Uso e definição da biblioteca
-
-Para exemplificar o uso do biblioteca foi utilizado os dados da **[API de localidades do IBGE](https://servicodados.ibge.gov.br/api/docs/localidades)** para exportação.
+Para exemplificar o uso do biblioteca foi utilizado os dados da **[API de localidades do IBGE](https://servicodados.ibge.gov.br/api/docs/localidades)** para geração e exportação do relatório.
 
 [LocalidadesIBGE.pdf](https://github.com/antoniojmsjr/FastReportExport/files/9128761/LocalidadesIBGE.pdf)
 
