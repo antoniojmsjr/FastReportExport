@@ -114,7 +114,8 @@ Os exemplos estão disponíveis na pasta do projeto:
 
 ```delphi
 uses FRExport, FRExport.Types, FRExport.Interfaces.Providers;
-
+```
+```delphi
 var
   lFRExportPDF: IFRExportPDF;
   lFRExportHTML: IFRExportHTML;
@@ -139,7 +140,11 @@ begin
   try
     TFRExport.New.
       DataSets.
-        SetDataSet(qryCliente, 'DataSetCliente').
+        SetDataSet(qryEstadosBrasil, 'EstadosBrasil').
+        SetDataSet(frxdbMunicipioEstado).
+        SetDataSet(frxdbMunicipioRegiao).
+        SetDataSet(qryEstadoRegiao, 'EstadoRegiao').
+        SetDataSet(qryMunicipios, 'Municipios').
       &End.
       Providers.
         SetProvider(lFRExportPDF).
@@ -160,7 +165,7 @@ begin
             if Assigned(lfrxComponent) then
             begin
               lfrxMemoView.Memo.Clear;
-              lfrxMemoView.Memo.Text := 'VCL';
+              lfrxMemoView.Memo.Text := Format('Aplicativo de Exemplo: %s', ['VCL']);
             end;
           end).
         Execute; //EXECUTA O PROCESSO DE EXPORTAÇÃO DO RELATÓRIO
@@ -180,7 +185,7 @@ begin
   begin
     lFileStream := nil;
     try
-      lFileExport := Format('%s%s', [TUtils.PathApp, 'Cliente.pdf']);
+      lFileExport := Format('%s%s', [TUtils.PathApp, 'LocalidadesIBGE.pdf']);
       lFileStream := TFileStream.Create(lFileExport, fmCreate);
       lFileStream.CopyFrom(lFRExportPDF.Stream, 0);
     finally
@@ -193,7 +198,7 @@ begin
   begin
     lFileStream := nil;
     try
-      lFileExport := Format('%s%s', [TUtils.PathApp, 'Cliente.html']);
+      lFileExport := Format('%s%s', [TUtils.PathApp, 'LocalidadesIBGE.html']);
       lFileStream := TFileStream.Create(lFileExport, fmCreate);
       lFileStream.CopyFrom(lFRExportHTML.Stream, 0);
     finally
@@ -206,7 +211,7 @@ begin
   begin
     lFileStream := nil;
     try
-      lFileExport := Format('%s%s', [TUtils.PathApp, 'Cliente.png']);
+      lFileExport := Format('%s%s', [TUtils.PathApp, 'LocalidadesIBGE.png']);
       lFileStream := TFileStream.Create(lFileExport, fmCreate);
       lFileStream.CopyFrom(lFRExportPNG.Stream, 0);
     finally
