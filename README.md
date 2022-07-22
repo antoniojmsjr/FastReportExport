@@ -226,7 +226,7 @@ end;
 **Exemplo compilado**
 
 * VCL
-* VCL Horse
+* VCL [(Horse)](https://github.com/HashLoad/horse)
 
 Download: [Demo.zip](https://github.com/antoniojmsjr/FastReportExport/files/9128777/Demo.zip)
 
