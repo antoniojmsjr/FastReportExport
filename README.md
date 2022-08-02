@@ -10,7 +10,7 @@
 
 # FastReportExport
 
-**FastReportExport** é uma biblioteca para exportação de relatórios com [Fast Report](https://www.fast-report.com) para ambientes **multithreading**.
+**FastReportExport** é uma biblioteca para exportação de relatórios com [Fast Report](https://www.fast-report.com) para ambientes **multithreading** e não **GUI(Graphical User Interface)**.
 
 Implementado na linguagem Delphi, utiliza o conceito de [fluent interface](https://en.wikipedia.org/wiki/Fluent_interface) para guiar no uso da biblioteca, desenvolvido para exportar relatórios nos formatos PDF, HTML, PNG, entre outros, conforme a necessidade.
 
