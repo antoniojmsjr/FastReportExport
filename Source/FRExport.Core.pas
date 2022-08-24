@@ -535,12 +535,13 @@ begin
   pfrxCustomExportFilter.ShowProgress := False;
   pfrxCustomExportFilter.CreationTime := Now;
   pfrxCustomExportFilter.Stream := FStream;
-  //UTILIZA UM ARQUIVO TEMPRÁRIO PARA EXPORTAÇÃO
+  //UTILIZA UM ARQUIVO TEMPORÁRIO PARA EXPORTAÇÃO
   //pfrxCustomExportFilter.UseFileCache := True;
 end;
 
 function TFRExportProviderCustom.GetStream: TStream;
 begin
+  FStream.Position := 0;
   Result := FStream;
 end;
 {$ENDREGION}
