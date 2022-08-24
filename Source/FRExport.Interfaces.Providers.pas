@@ -28,12 +28,12 @@ interface
 
 uses
   System.Classes, frxClass, frxExportPDF, frxExportHTML, frxExportImage,
-  frxExportCSV, frxExportRTF;
+  frxExportCSV, frxExportRTF, frxExportXLS, frxExportXLSX, frxExportDOCX;
 
 type
 
   IFRExportProvider = interface
-    ['{8270560F-760C-4618-B14A-D5A583DBE218}']
+    ['{801C408B-8B7F-4288-AE41-42E836F0EACD}']
     function GetfrxCustomExportFilter: TfrxCustomExportFilter;
     function GetName: string;
     function GetStream: TStream;
@@ -75,6 +75,27 @@ type
     function GetfrxRTF: TfrxRTFExport;
 
     property frxRTF: TfrxRTFExport read GetfrxRTF;
+  end;
+
+  IFRExportXLS = interface(IFRExportProvider)
+    ['{C57D4C26-656B-4159-A229-B0B795BD14D8}']
+    function GetfrxXLS: TfrxXLSExport;
+
+    property frxXLS: TfrxXLSExport read GetfrxXLS;
+  end;
+
+  IFRExportXLSX = interface(IFRExportProvider)
+    ['{E1185657-BDD7-4F28-836B-4CEB764D5D26}']
+    function GetfrxXLSX: TfrxXLSXExport;
+
+    property frxXLSX: TfrxXLSXExport read GetfrxXLSX;
+  end;
+
+  IFRExportDOCX = interface(IFRExportProvider)
+    ['{F05403B5-6E5C-4088-AE62-81F3DA8A986D}']
+    function GetfrxDOCX: TfrxDOCXExport;
+
+    property frxDOCX: TfrxDOCXExport read GetfrxDOCX;
   end;
 
 implementation

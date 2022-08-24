@@ -29,8 +29,8 @@ interface
 uses
   System.Classes, System.Generics.Collections, System.Win.ComObj, Vcl.ExtCtrls,
   frxClass, frxDBSet, frxExportPDF, frxExportHTML, frxExportImage, frxExportCSV,
-  frxExportRTF, frxChart, frxBarcode, frxOLE, frxRich, frxCross,
-  frxGradient, frxDMPExport, frxCrypt, frxChBox,
+  frxExportRTF, frxExportXLS, frxExportXLSX, frxExportDOCX, frxChart, frxBarcode,
+  frxOLE, frxRich, frxCross, frxGradient, frxDMPExport, frxCrypt, frxChBox,
 
   //ESSA LINHA PODE SER COMENTADA QUANDO A VERSÃO DO FAST REPORT NÃO DÁ SUPORTE
   frxGaugeView, frxMap, frxCellularTextObject, frxZipCode, frxTableObject, frxGaugePanel,
@@ -251,6 +251,63 @@ type
     constructor Create; override;
     destructor Destroy; override;
     class function New: IFRExportRTF;
+  end;
+  {$ENDREGION}
+
+  {$REGION 'TFRExportProviderXLSCustom'}
+  TFRExportProviderXLSCustom = class(TFRExportProviderCustom, IFRExportXLS)
+  private
+    { private declarations }
+    FFrxXLSExport: TfrxXLSExport;
+
+    function GetfrxCustomExportFilter: TfrxCustomExportFilter; override;
+    function GetName: string; override;
+    function GetfrxXLS: TfrxXLSExport;
+  protected
+    { protected declarations }
+  public
+    { public declarations }
+    constructor Create; override;
+    destructor Destroy; override;
+    class function New: IFRExportXLS;
+  end;
+  {$ENDREGION}
+
+  {$REGION 'TFRExportProviderXLSXCustom'}
+  TFRExportProviderXLSXCustom = class(TFRExportProviderCustom, IFRExportXLSX)
+  private
+    { private declarations }
+    FFrxXLSXExport: TfrxXLSXExport;
+
+    function GetfrxCustomExportFilter: TfrxCustomExportFilter; override;
+    function GetName: string; override;
+    function GetfrxXLSX: TfrxXLSXExport;
+  protected
+    { protected declarations }
+  public
+    { public declarations }
+    constructor Create; override;
+    destructor Destroy; override;
+    class function New: IFRExportXLSX;
+  end;
+  {$ENDREGION}
+
+  {$REGION 'TFRExportProviderDOCXCustom'}
+  TFRExportProviderDOCXCustom = class(TFRExportProviderCustom, IFRExportDOCX)
+  private
+    { private declarations }
+    FFrxDOCXExport: TfrxDOCXExport;
+
+    function GetfrxCustomExportFilter: TfrxCustomExportFilter; override;
+    function GetName: string; override;
+    function GetfrxDOCX: TfrxDOCXExport;
+  protected
+    { protected declarations }
+  public
+    { public declarations }
+    constructor Create; override;
+    destructor Destroy; override;
+    class function New: IFRExportDOCX;
   end;
   {$ENDREGION}
 
@@ -496,23 +553,26 @@ begin
   if not FFrxReport.PrepareReport(False) then
     raise EFRExportPrepareReport.Create(FFrxReport.Errors); //PEGA OS ERROS GERADO PELO PrepareReport
 
-  //LISTA DE PROVEDORES DE EXPORTAÇÃO
+  //LISTA DE PROVEDORES PARA EXPORTAÇÃO
   for lFRExportProviderInterf in FFRExportProviders.ListProviders do
-  begin
-    try
-      ExportProvider(lFRExportProviderInterf);
-    except
-      on E: Exception do
-        raise EFRExportProvider.Create(lFRExportProviderInterf.Name, E.Message);
-    end;
-  end;
+    ExportProvider(lFRExportProviderInterf);
 end;
 
 procedure TFRExportExecute.ExportProvider(pProvider: IFRExportProvider);
 begin
-  FFrxReport.Export(pProvider.GetfrxCustomExportFilter);
+  try
+    if not FFrxReport.Export(pProvider.GetfrxCustomExportFilter) then
+      raise EFRExportProvider.Create(pProvider.Name, FFrxReport.Errors.Text);
+  except
+    on E: Exception do
+    begin
+      if not (E is EFRExportProvider) then
+        raise EFRExportProvider.Create(pProvider.Name, E.Message)
+      else
+        raise;
+    end;
+  end;
 end;
-
 {$ENDREGION}
 
 {$REGION 'TFRExportProviderCustom'}
@@ -535,6 +595,7 @@ begin
   pfrxCustomExportFilter.ShowProgress := False;
   pfrxCustomExportFilter.CreationTime := Now;
   pfrxCustomExportFilter.Stream := FStream;
+  pfrxCustomExportFilter.UseFileCache := False;
   //UTILIZA UM ARQUIVO TEMPORÁRIO PARA EXPORTAÇÃO
   //pfrxCustomExportFilter.UseFileCache := True;
 end;
@@ -720,6 +781,118 @@ end;
 function TFRExportProviderRTFCustom.GetName: string;
 begin
   Result := 'RTF';
+end;
+{$ENDREGION}
+
+{$REGION 'TFRExportProviderXLSCustom'}
+constructor TFRExportProviderXLSCustom.Create;
+begin
+  inherited Create;
+  FFrxXLSExport := TfrxXLSExport.Create(nil);
+  FFrxXLSExport.Background := True;
+  FFrxXLSExport.SlaveExport := True;
+  FFrxXLSExport.FileName := TGUID.NewGuid.ToString() + '.xls';
+  ConfigFrxExportFilter(FFrxXLSExport);
+end;
+
+class function TFRExportProviderXLSCustom.New: IFRExportXLS;
+begin
+ Result := Self.Create;
+end;
+
+destructor TFRExportProviderXLSCustom.Destroy;
+begin
+  FFrxXLSExport.Free;
+  inherited Destroy;
+end;
+
+function TFRExportProviderXLSCustom.GetfrxCustomExportFilter: TfrxCustomExportFilter;
+begin
+  Result := GetfrxXLS;
+end;
+
+function TFRExportProviderXLSCustom.GetfrxXLS: TfrxXLSExport;
+begin
+  Result := FFrxXLSExport;
+end;
+
+function TFRExportProviderXLSCustom.GetName: string;
+begin
+  Result := 'Excel XSL';
+end;
+{$ENDREGION}
+
+{$REGION 'TFRExportProviderXLSXCustom'}
+constructor TFRExportProviderXLSXCustom.Create;
+begin
+  inherited Create;
+  FFrxXLSXExport := TfrxXLSXExport.Create(nil);
+  FFrxXLSXExport.SlaveExport := True;
+  FFrxXLSXExport.FileName := TGUID.NewGuid.ToString() + '.xlsx';
+  ConfigFrxExportFilter(FFrxXLSXExport);
+end;
+
+class function TFRExportProviderXLSXCustom.New: IFRExportXLSX;
+begin
+ Result := Self.Create;
+end;
+
+destructor TFRExportProviderXLSXCustom.Destroy;
+begin
+  FFrxXLSXExport.Free;
+  inherited Destroy;
+end;
+
+function TFRExportProviderXLSXCustom.GetfrxCustomExportFilter: TfrxCustomExportFilter;
+begin
+  Result := GetfrxXLSX;
+end;
+
+function TFRExportProviderXLSXCustom.GetfrxXLSX: TfrxXLSXExport;
+begin
+  Result := FFrxXLSXExport;
+end;
+
+function TFRExportProviderXLSXCustom.GetName: string;
+begin
+  Result := 'Excel XSLX';
+end;
+{$ENDREGION}
+
+{$REGION 'TFRExportProviderDOCXCustom'}
+constructor TFRExportProviderDOCXCustom.Create;
+begin
+  inherited Create;
+  FFrxDOCXExport := TfrxDOCXExport.Create(nil);
+  FFrxDOCXExport.SlaveExport := True;
+  FFrxDOCXExport.FileName := TGUID.NewGuid.ToString() + '.docx';
+  ConfigFrxExportFilter(FFrxDOCXExport);
+end;
+
+class function TFRExportProviderDOCXCustom.New: IFRExportDOCX;
+begin
+ Result := Self.Create;
+end;
+
+destructor TFRExportProviderDOCXCustom.Destroy;
+begin
+  FFrxDOCXExport.Free;
+  inherited Destroy;
+end;
+
+function TFRExportProviderDOCXCustom.GetfrxCustomExportFilter: TfrxCustomExportFilter;
+begin
+  Result := GetfrxDOCX;
+end;
+
+function TFRExportProviderDOCXCustom.GetfrxDOCX: TfrxDOCXExport;
+begin
+  Result := FFrxDOCXExport;
+end;
+
+function TFRExportProviderDOCXCustom.GetName: string;
+begin
+  Result := 'Word DOCX';
 end;
 {$ENDREGION}
 
