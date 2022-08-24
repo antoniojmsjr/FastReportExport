@@ -53,6 +53,9 @@ Se você optar por instalar manualmente, basta adicionar as seguintes pastas ao 
 | PNG | IFRExportPNG | TfrxPNGExport |
 | CSV | IFRExportCSV | TfrxCSVExport |
 | RTF | IFRExportRTF | TfrxRTFExport |
+| XLS | IFRExportXLS | TfrxXLSExport |
+| XLSX | IFRExportXLSX | TfrxXLSXExport |
+| DOCX | IFRExportDOCX | TfrxDOCXExport |
 
 **Exemplo**
 
