@@ -4,7 +4,6 @@ uses
   System.SysUtils,
   System.Classes,
   Horse,
-  Horse.StaticFiles,
   FireDAC.Stan.Intf,
   FireDAC.Stan.Option,
   FireDAC.Stan.Error,
@@ -34,7 +33,6 @@ uses
 {$R *.res}
 
 begin
-  THorse.Use('/', HorseStaticFile(TUtils.PathApp, ['']));
 
   THorse.Get('ping',
     procedure(Req: THorseRequest; Res: THorseResponse; Next: TProc)
@@ -44,15 +42,6 @@ begin
 
   THorse.Get('export/:estadoid',
     procedure(pReq: THorseRequest; pRes: THorseResponse; pNext: TProc)
-
-    function GetFileName(const pFileName: string): string;
-    var
-      lUUID: TGuid;
-    begin
-      if (CreateGuid(lUUID) = S_OK) then
-        Result := ReplaceStr(ReplaceStr(Format('%s-%s', [pFileName, GuidToString(lUUID)]), '{', ''), '}', '');
-    end;
-
     var
       lFDConnection: TFDConnection;
       lQryEstadosBrasil: TFDQuery;
@@ -61,12 +50,11 @@ begin
       lQryEstadoRegiao: TFDQuery;
       lQryMunicipios: TFDQuery;
       lFRExportPDF: IFRExportPDF;
-      lFileStream: TFileStream;
       lError: string;
-      lFileExportPDF: string;
       lFiltro: Integer;
     begin
       lFiltro := pReq.Params.Field('estadoid').AsInteger;
+
       lFDConnection := nil;
       try
         lFDConnection := TFDConnection.Create(nil);
@@ -140,37 +128,20 @@ begin
             if E is EFRExport then
               pRes.Send(E.ToString).Status(500)
             else
-              pRes.Send(E.Message+' - '+E.QualifiedClassName).Status(500);
+              pRes.Send(E.Message+' - ' + E.QualifiedClassName).Status(500);
             Exit;
           end;
         end;
 
-        //EXPORT
-        Sleep(1);
+        //EXPORT PDF
         try
-
-          //SALVAR PDF
           if Assigned(lFRExportPDF.Stream) then
-          begin
-            lFileStream := nil;
-            try
-              lFileExportPDF := Format('%s%s.%s', [TUtils.PathApp, GetFileName('LocalidadesIBGE'), 'pdf']);
-              lFileStream := TFileStream.Create(lFileExportPDF, fmCreate);
-              lFileStream.CopyFrom(lFRExportPDF.Stream, 0);
-
-              //ENVIO DO ARQUIVO
-              pRes.SendFile(lFRExportPDF.Stream, 'LocalidadesIBGE.pdf', 'application/pdf');
-            finally
-              FreeAndNil(lFileStream);
-            end;
-          end;
-
+            pRes.SendFile(lFRExportPDF.Stream, 'LocalidadesIBGE.pdf', 'application/pdf') //ENVIO DO ARQUIVO
+          else
+            pRes.Send('Export fail, stream empty.').Status(404);
         except
           on E: Exception do
-          begin
-            pRes.Send('Export error: '+ E.Message).Status(500);
-            Exit;
-          end;
+            pRes.Send('Export error: ' + E.Message).Status(500);
         end;
 
       finally

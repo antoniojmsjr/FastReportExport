@@ -11,7 +11,7 @@ uses
   FireDAC.Stan.Param, FireDAC.DatS, FireDAC.DApt.Intf, FireDAC.DApt,
   FireDAC.Comp.DataSet, frxClass, System.StrUtils,
   FRExport, FRExport.Interfaces, FRExport.Interfaces.Providers, FRExport.Types, //FRExport Classes
-  Utils, Data, Horse, Horse.StaticFiles;
+  Utils, Data, Horse;
 
 type
   TsrvFastReportHorse = class(TService)
@@ -19,7 +19,6 @@ type
   private
     { Private declarations }
     procedure ExportFastReport(pReq: THorseRequest; pRes: THorseResponse; pNext: TNextProc);
-    function GetFileName(const pFileName: string): string;
   public
     { Public declarations }
     function GetServiceController: TServiceController; override;
@@ -37,14 +36,6 @@ begin
   srvFastReportHorse.Controller(CtrlCode);
 end;
 
-function TsrvFastReportHorse.GetFileName(const pFileName: string): string;
-var
-  lUUID: TGuid;
-begin
-  if (CreateGuid(lUUID) = S_OK) then
-    Result := ReplaceStr(ReplaceStr(Format('%s-%s', [pFileName, GuidToString(lUUID)]), '{', ''), '}', '');
-end;
-
 procedure TsrvFastReportHorse.ExportFastReport(pReq: THorseRequest;
   pRes: THorseResponse; pNext: TNextProc);
 var
@@ -55,12 +46,11 @@ var
   lQryEstadoRegiao: TFDQuery;
   lQryMunicipios: TFDQuery;
   lFRExportPDF: IFRExportPDF;
-  lFileStream: TFileStream;
   lError: string;
-  lFileExportPDF: string;
   lFiltro: Integer;
 begin
   lFiltro := pReq.Params.Field('estadoid').AsInteger;
+
   lFDConnection := nil;
   try
     lFDConnection := TFDConnection.Create(nil);
@@ -134,37 +124,20 @@ begin
         if E is EFRExport then
           pRes.Send(E.ToString).Status(500)
         else
-          pRes.Send(E.Message+' - '+E.QualifiedClassName).Status(500);
+          pRes.Send(E.Message+' - ' + E.QualifiedClassName).Status(500);
         Exit;
       end;
     end;
 
-    //EXPORT
-    Sleep(1);
+    //EXPORT PDF
     try
-
-      //SALVAR PDF
       if Assigned(lFRExportPDF.Stream) then
-      begin
-        lFileStream := nil;
-        try
-          lFileExportPDF := Format('%s%s.%s', [TUtils.PathApp, GetFileName('LocalidadesIBGE'), 'pdf']);
-          lFileStream := TFileStream.Create(lFileExportPDF, fmCreate);
-          lFileStream.CopyFrom(lFRExportPDF.Stream, 0);
-
-          //ENVIO DO ARQUIVO
-          pRes.SendFile(lFRExportPDF.Stream, 'LocalidadesIBGE.pdf', 'application/pdf');
-        finally
-          FreeAndNil(lFileStream);
-        end;
-      end;
-
+        pRes.SendFile(lFRExportPDF.Stream, 'LocalidadesIBGE.pdf', 'application/pdf') //ENVIO DO ARQUIVO
+      else
+        pRes.Send('Export fail, stream empty.').Status(404);
     except
       on E: Exception do
-      begin
-        pRes.Send('Export error: '+ E.Message).Status(500);
-        Exit;
-      end;
+        pRes.Send('Export error: ' + E.Message).Status(500);
     end;
 
   finally
@@ -183,7 +156,6 @@ begin
   Started := True;
   ReportStatus;
 
-  THorse.Use('/', HorseStaticFile(TUtils.PathApp, ['']));
   THorse.MaxConnections := 100;
 
   THorse.Get('ping',
