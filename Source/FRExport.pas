@@ -44,6 +44,8 @@ type
   TFRExportProviderPDF = class(TFRExportProviderPDFCustom);
   TFRExportProviderHTML = class(TFRExportProviderHTMLCustom);
   TFRExportProviderPNG = class(TFRExportProviderPNGCustom);
+  TFRExportProviderBMP = class(TFRExportProviderBMPCustom);
+  TFRExportProviderJPEG = class(TFRExportProviderJPEGCustom);
   TFRExportProviderCSV = class(TFRExportProviderCSVCustom);
   TFRExportProviderRTF = class(TFRExportProviderRTFCustom);
   TFRExportProviderXLS = class(TFRExportProviderXLSCustom);

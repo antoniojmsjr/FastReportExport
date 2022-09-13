@@ -30,6 +30,9 @@
         <Projects Include="Samples\CGI\CGI.dproj">
             <Dependencies/>
         </Projects>
+        <Projects Include="Samples\ClientVCL\ClientVCL.dproj">
+            <Dependencies/>
+        </Projects>
     </ItemGroup>
     <ProjectExtensions>
         <Borland.Personality>Default.Personality.12</Borland.Personality>
@@ -119,14 +122,23 @@
     <Target Name="CGI:Make">
         <MSBuild Projects="Samples\CGI\CGI.dproj" Targets="Make"/>
     </Target>
+    <Target Name="ClientVCL">
+        <MSBuild Projects="Samples\ClientVCL\ClientVCL.dproj"/>
+    </Target>
+    <Target Name="ClientVCL:Clean">
+        <MSBuild Projects="Samples\ClientVCL\ClientVCL.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="ClientVCL:Make">
+        <MSBuild Projects="Samples\ClientVCL\ClientVCL.dproj" Targets="Make"/>
+    </Target>
     <Target Name="Build">
-        <CallTarget Targets="VCL;FMX;Console;WindowsService;VCLHorse;ConsoleHorse;WindowsServiceHorse;ISAPI;CGI"/>
+        <CallTarget Targets="VCL;FMX;Console;WindowsService;VCLHorse;ConsoleHorse;WindowsServiceHorse;ISAPI;CGI;ClientVCL"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="VCL:Clean;FMX:Clean;Console:Clean;WindowsService:Clean;VCLHorse:Clean;ConsoleHorse:Clean;WindowsServiceHorse:Clean;ISAPI:Clean;CGI:Clean"/>
+        <CallTarget Targets="VCL:Clean;FMX:Clean;Console:Clean;WindowsService:Clean;VCLHorse:Clean;ConsoleHorse:Clean;WindowsServiceHorse:Clean;ISAPI:Clean;CGI:Clean;ClientVCL:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="VCL:Make;FMX:Make;Console:Make;WindowsService:Make;VCLHorse:Make;ConsoleHorse:Make;WindowsServiceHorse:Make;ISAPI:Make;CGI:Make"/>
+        <CallTarget Targets="VCL:Make;FMX:Make;Console:Make;WindowsService:Make;VCLHorse:Make;ConsoleHorse:Make;WindowsServiceHorse:Make;ISAPI:Make;CGI:Make;ClientVCL:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>

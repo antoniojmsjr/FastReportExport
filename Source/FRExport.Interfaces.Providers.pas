@@ -98,6 +98,20 @@ type
     property frxDOCX: TfrxDOCXExport read GetfrxDOCX;
   end;
 
+  IFRExportBMP = interface(IFRExportProvider)
+    ['{2DE25CD1-ADB0-4EB4-A355-25BE4EFC816F}']
+    function GetfrxBMP: TfrxBMPExport;
+
+    property frxBMP: TfrxBMPExport read GetfrxBMP;
+  end;
+
+  IFRExportJPEG = interface(IFRExportProvider)
+    ['{1F1DD580-6C83-499F-861D-8BCCC8DB3198}']
+    function GetfrxJPEG: TfrxJPEGExport;
+
+    property frxJPEG: TfrxJPEGExport read GetfrxJPEG;
+  end;
+
 implementation
 
 end.

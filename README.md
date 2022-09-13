@@ -51,6 +51,8 @@ Se você optar por instalar manualmente, basta adicionar as seguintes pastas ao 
 | PDF | IFRExportPDF | TfrxPDFExport |
 | HTML | IFRExportHTML | TfrxHTMLExport |
 | PNG | IFRExportPNG | TfrxPNGExport |
+| BMP | IFRExportBMP | TfrxBMPExport |
+| JPEG | IFRExportJPEG | TfrxJPEGExport |
 | CSV | IFRExportCSV | TfrxCSVExport |
 | RTF | IFRExportRTF | TfrxRTFExport |
 | XLS | IFRExportXLS | TfrxXLSExport |
@@ -67,7 +69,7 @@ var
 begin
 
   //PROVIDER PDF
-  lFRExportPDF := TFRExportProviderPDF.New; 
+  lFRExportPDF := TFRExportProviderPDF.New;
   lFRExportPDF.frxPDF.Subject := 'Samples Fast Report Export';
   lFRExportPDF.frxPDF.Author := 'Antônio José Medeiros Schneider';
 
@@ -77,7 +79,7 @@ begin
   //PROVIDER PNG
   lFRExportPNG := TFRExportProviderPNG.New;
   lFRExportPNG.frxPNG.JPEGQuality := 100;
-  
+
 end;
 ```
 
@@ -105,7 +107,7 @@ Os exemplos estão disponíveis na pasta do projeto:
 **Banco de dados de exemplo**
 
 * Firebird: 2.5.7 [Donwload](http://sourceforge.net/projects/firebird/files/firebird-win32/2.5.7-Release/Firebird-2.5.7.27050_0_Win32.exe/download)
-* Arquivo BD: 
+* Arquivo BD:
 ```
 ..\FastReportExport\Samples\DB
 ```

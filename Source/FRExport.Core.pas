@@ -311,6 +311,44 @@ type
   end;
   {$ENDREGION}
 
+  {$REGION 'TFRExportProviderBMPCustom'}
+  TFRExportProviderBMPCustom = class(TFRExportProviderCustom, IFRExportBMP)
+  private
+    { private declarations }
+    FFrxBMPExport: TfrxBMPExport;
+
+    function GetfrxCustomExportFilter: TfrxCustomExportFilter; override;
+    function GetName: string; override;
+    function GetfrxBMP: TfrxBMPExport;
+  protected
+    { protected declarations }
+  public
+    { public declarations }
+    constructor Create; override;
+    destructor Destroy; override;
+    class function New: IFRExportBMP;
+  end;
+  {$ENDREGION}
+
+  {$REGION 'TFRExportProviderJPEGCustom'}
+  TFRExportProviderJPEGCustom = class(TFRExportProviderCustom, IFRExportJPEG)
+  private
+    { private declarations }
+    FFrxJPEGExport: TfrxJPEGExport;
+
+    function GetfrxCustomExportFilter: TfrxCustomExportFilter; override;
+    function GetName: string; override;
+    function GetfrxJPEG: TfrxJPEGExport;
+  protected
+    { protected declarations }
+  public
+    { public declarations }
+    constructor Create; override;
+    destructor Destroy; override;
+    class function New: IFRExportJPEG;
+  end;
+  {$ENDREGION}
+
 implementation
 
 uses
@@ -893,6 +931,76 @@ end;
 function TFRExportProviderDOCXCustom.GetName: string;
 begin
   Result := 'Word DOCX';
+end;
+{$ENDREGION}
+
+{$REGION 'TFRExportProviderBMPCustom'}
+constructor TFRExportProviderBMPCustom.Create;
+begin
+  inherited Create;
+  FFrxBMPExport := TfrxBMPExport.Create(nil);
+  ConfigFrxExportFilter(FFrxBMPExport);
+end;
+
+class function TFRExportProviderBMPCustom.New: IFRExportBMP;
+begin
+  Result := Self.Create;
+end;
+
+destructor TFRExportProviderBMPCustom.Destroy;
+begin
+  FFrxBMPExport.Free;
+  inherited Destroy
+end;
+
+function TFRExportProviderBMPCustom.GetfrxBMP: TfrxBMPExport;
+begin
+  Result := FFrxBMPExport;
+end;
+
+function TFRExportProviderBMPCustom.GetfrxCustomExportFilter: TfrxCustomExportFilter;
+begin
+  Result := GetfrxBMP;
+end;
+
+function TFRExportProviderBMPCustom.GetName: string;
+begin
+  Result := 'BMP';
+end;
+{$ENDREGION}
+
+{$REGION 'TFRExportProviderJPEGCustom'}
+constructor TFRExportProviderJPEGCustom.Create;
+begin
+  inherited Create;
+  FFrxJPEGExport := TfrxJPEGExport.Create(nil);
+  ConfigFrxExportFilter(FFrxJPEGExport);
+end;
+
+class function TFRExportProviderJPEGCustom.New: IFRExportJPEG;
+begin
+  Result := Self.Create;
+end;
+
+destructor TFRExportProviderJPEGCustom.Destroy;
+begin
+  FFrxJPEGExport.Free;
+  inherited Destroy
+end;
+
+function TFRExportProviderJPEGCustom.GetfrxCustomExportFilter: TfrxCustomExportFilter;
+begin
+ Result := GetfrxJPEG;
+end;
+
+function TFRExportProviderJPEGCustom.GetfrxJPEG: TfrxJPEGExport;
+begin
+  Result := FFrxJPEGExport;
+end;
+
+function TFRExportProviderJPEGCustom.GetName: string;
+begin
+  Result := 'JPEG';
 end;
 {$ENDREGION}
 
