@@ -236,7 +236,7 @@ end;
 
 Download: [Demo.zip](https://github.com/antoniojmsjr/FastReportExport/files/9559949/Demo.zip)
 
-**Teste de desempenho para aplicações web usando [JMeter](https://jmeter.apache.org/):**
+**Teste de stress para aplicações web usando [JMeter](https://jmeter.apache.org/):**
 
 ```
 ..\FastReportExport\Samples\JMeter
