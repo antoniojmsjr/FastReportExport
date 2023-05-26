@@ -174,6 +174,9 @@ begin
               lfrxMemoView.Memo.Clear;
               lfrxMemoView.Memo.Text := Format('Aplicativo de Exemplo: %s', ['VCL']);
             end;
+
+			//VARIÁVEIS DO RELATÓRIO
+            pfrxReport.Variables.Variables['DATA_HORA_IMPRESSAO'] := QuotedStr(DateTimeToStr(Now));
           end).
         Execute; //EXECUTA O PROCESSO DE EXPORTAÇÃO DO RELATÓRIO
   except
@@ -242,9 +245,7 @@ Download: [Demo.zip](https://github.com/antoniojmsjr/FastReportExport/files/9559
 ..\FastReportExport\Samples\JMeter
 ```
 
-
 https://user-images.githubusercontent.com/20980984/173268272-dc81f411-b2e5-4030-8c56-c461527f2ebc.mp4
-
 
 
 ## ⚠️ Licença

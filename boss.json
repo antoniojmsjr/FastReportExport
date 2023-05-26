@@ -1,7 +1,7 @@
 {
-	"name": "FastReportExport",
+	"name": "\u0016\u0016FastReportExport",
 	"description": "Biblioteca de exportação de relatórios utilizando Fast Report em ambientes multithreading.",
-	"version": "v1.1.20",
+	"version": "v1.1.21",
 	"homepage": "https://github.com/antoniojmsjr/FastReportExport",
 	"mainsrc": "Source",
 	"projects": [],
