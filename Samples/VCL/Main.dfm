@@ -55,7 +55,7 @@ object frmMain: TfrmMain
   end
   object frxReport: TfrxReport
     Tag = 21650
-    Version = '6.9.15'
+    Version = '6.9.3'
     DotMatrixReport = False
     IniFile = '\Software\Fast Reports'
     PreviewOptions.Buttons = [pbPrint, pbLoad, pbSave, pbExport, pbZoom, pbFind, pbOutline, pbPageSetup, pbTools, pbEdit, pbNavigator, pbExportQuick, pbCopy, pbSelection]
@@ -63,7 +63,7 @@ object frmMain: TfrmMain
     PrintOptions.Printer = 'Default'
     PrintOptions.PrintOnSheet = 0
     ReportOptions.CreateDate = 44757.851638495400000000
-    ReportOptions.LastChange = 44759.807579664350000000
+    ReportOptions.LastChange = 45071.854776550900000000
     ScriptLanguage = 'PascalScript'
     ScriptText.Strings = (
       ''
@@ -94,7 +94,15 @@ object frmMain: TfrmMain
         DataSet = frxdbMunicipios
         DataSetName = 'Municipios'
       end>
-    Variables = <>
+    Variables = <
+      item
+        Name = ' App'
+        Value = Null
+      end
+      item
+        Name = 'DATA_HORA_IMPRESSAO'
+        Value = Null
+      end>
     Style = <>
     object Data: TfrxDataPage
       Height = 1000.000000000000000000
@@ -112,10 +120,6 @@ object frmMain: TfrmMain
       MirrorMode = []
       object ReportTitle2: TfrxReportTitle
         FillType = ftBrush
-        FillGap.Top = 0
-        FillGap.Left = 0
-        FillGap.Bottom = 0
-        FillGap.Right = 0
         Frame.Typ = []
         Height = 49.133890000000000000
         Top = 18.897650000000000000
@@ -140,10 +144,6 @@ object frmMain: TfrmMain
       end
       object PageHeader2: TfrxPageHeader
         FillType = ftBrush
-        FillGap.Top = 0
-        FillGap.Left = 0
-        FillGap.Bottom = 0
-        FillGap.Right = 0
         Frame.Typ = []
         Height = 491.338900000000000000
         Top = 90.708720000000000000
@@ -16330,10 +16330,6 @@ object frmMain: TfrmMain
       end
       object MasterData1: TfrxMasterData
         FillType = ftBrush
-        FillGap.Top = 0
-        FillGap.Left = 0
-        FillGap.Bottom = 0
-        FillGap.Right = 0
         Frame.Typ = []
         Height = 18.897650000000000000
         Top = 642.520100000000000000
@@ -16368,12 +16364,8 @@ object frmMain: TfrmMain
       end
       object PageFooter1: TfrxPageFooter
         FillType = ftBrush
-        FillGap.Top = 0
-        FillGap.Left = 0
-        FillGap.Bottom = 0
-        FillGap.Right = 0
         Frame.Typ = []
-        Height = 15.118110240000000000
+        Height = 18.897637795275600000
         Top = 721.890230000000000000
         Width = 718.110700000000000000
         object Line1: TfrxLineView
@@ -16381,6 +16373,15 @@ object frmMain: TfrmMain
           Width = 718.110700000000000000
           Color = clBlack
           Frame.Typ = [ftTop]
+        end
+        object mmoVariables: TfrxMemoView
+          Align = baLeft
+          AllowVectorExport = True
+          Width = 196.535462360000000000
+          Height = 18.897650000000000000
+          Frame.Typ = []
+          Memo.UTF8W = (
+            '[DATA_HORA_IMPRESSAO]')
         end
       end
     end
@@ -16396,10 +16397,6 @@ object frmMain: TfrmMain
       MirrorMode = []
       object ReportTitle1: TfrxReportTitle
         FillType = ftBrush
-        FillGap.Top = 0
-        FillGap.Left = 0
-        FillGap.Bottom = 0
-        FillGap.Right = 0
         Frame.Typ = []
         Height = 45.354360000000000000
         Top = 18.897650000000000000
@@ -16424,10 +16421,6 @@ object frmMain: TfrmMain
       end
       object PageHeader1: TfrxPageHeader
         FillType = ftBrush
-        FillGap.Top = 0
-        FillGap.Left = 0
-        FillGap.Bottom = 0
-        FillGap.Right = 0
         Frame.Typ = []
         Height = 876.850960000000000000
         Top = 86.929190000000000000
@@ -16625,10 +16618,6 @@ object frmMain: TfrmMain
       end
       object PageFooter2: TfrxPageFooter
         FillType = ftBrush
-        FillGap.Top = 0
-        FillGap.Left = 0
-        FillGap.Bottom = 0
-        FillGap.Right = 0
         Frame.Typ = []
         Height = 15.118110240000000000
         Top = 1024.252630000000000000
@@ -16654,10 +16643,6 @@ object frmMain: TfrmMain
       ResetPageNumbers = True
       object ReportTitle3: TfrxReportTitle
         FillType = ftBrush
-        FillGap.Top = 0
-        FillGap.Left = 0
-        FillGap.Bottom = 0
-        FillGap.Right = 0
         Frame.Typ = []
         Height = 45.354360000000000000
         Top = 18.897650000000000000
@@ -16682,10 +16667,6 @@ object frmMain: TfrmMain
       end
       object Band2: TfrxPageHeader
         FillType = ftBrush
-        FillGap.Top = 0
-        FillGap.Left = 0
-        FillGap.Bottom = 0
-        FillGap.Right = 0
         Frame.Typ = []
         Height = 24.566929133858300000
         Top = 86.929190000000000000
@@ -16747,10 +16728,6 @@ object frmMain: TfrmMain
       end
       object MasterData2: TfrxMasterData
         FillType = ftBrush
-        FillGap.Top = 0
-        FillGap.Left = 0
-        FillGap.Bottom = 0
-        FillGap.Right = 0
         Frame.Typ = []
         Height = 20.787401570000000000
         Top = 173.858380000000000000
@@ -16817,10 +16794,6 @@ object frmMain: TfrmMain
       end
       object PageFooter3: TfrxPageFooter
         FillType = ftBrush
-        FillGap.Top = 0
-        FillGap.Left = 0
-        FillGap.Bottom = 0
-        FillGap.Right = 0
         Frame.Typ = []
         Height = 15.118110240000000000
         Top = 257.008040000000000000

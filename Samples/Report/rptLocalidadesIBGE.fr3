@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
-<TfrxReport Tag="21650" Version="6.9.15" DotMatrixReport="False" IniFile="\Software\Fast Reports" PreviewOptions.Buttons="167935" PreviewOptions.Zoom="1" PrintOptions.Printer="Default" PrintOptions.PrintOnSheet="0" ReportOptions.CreateDate="44757,8516384954" ReportOptions.Description.Text="" ReportOptions.LastChange="44759,8075796644" ScriptLanguage="PascalScript" ScriptText.Text="&#13;&#10;begin&#13;&#10;&#13;&#10;end." OnReportPrint="frxReportAbstractOnReportPrint">
+<TfrxReport Tag="21650" Version="6.9.3" DotMatrixReport="False" IniFile="\Software\Fast Reports" PreviewOptions.Buttons="167935" PreviewOptions.Zoom="1" PrintOptions.Printer="Default" PrintOptions.PrintOnSheet="0" ReportOptions.CreateDate="44757,8516384954" ReportOptions.Description.Text="" ReportOptions.LastChange="45071,8598097569" ScriptLanguage="PascalScript" ScriptText.Text="&#13;&#10;begin&#13;&#10;&#13;&#10;end." OnReportPrint="frxReportAbstractOnReportPrint">
   <Datasets>
     <item DataSet="frxDBEstadoRegiao" DataSetName="EstadoRegiao"/>
     <item DataSet="frxdbEstadosBrasil" DataSetName="EstadosBrasil"/>
@@ -7,6 +7,10 @@
     <item DataSet="frxdbMunicipioRegiao" DataSetName="MunicipioRegiao"/>
     <item DataSet="frxdbMunicipios" DataSetName="Municipios"/>
   </Datasets>
+  <Variables>
+    <item Name=" App"/>
+    <item Name="DATA_HORA_IMPRESSAO"/>
+  </Variables>
   <TfrxDataPage Name="Data" HGuides.Text="" VGuides.Text="" Height="1000" Left="0" Top="0" Width="1000"/>
   <TfrxReportPage Name="pgHome" HGuides.Text="" VGuides.Text="" PaperWidth="210" PaperHeight="297" PaperSize="9" LeftMargin="10" RightMargin="10" TopMargin="10" BottomMargin="5" ColumnWidth="0" ColumnPositions.Text="" Frame.Typ="0" MirrorMode="0">
     <TfrxReportTitle Name="ReportTitle2" FillType="ftBrush" FillGap.Top="0" FillGap.Left="0" FillGap.Bottom="0" FillGap.Right="0" Frame.Typ="0" Height="49,13389" Left="0" Top="18,89765" Width="718,1107">
@@ -20,8 +24,9 @@
       <TfrxMemoView Name="EstadosBrasilESTADO_ID" IndexTag="1" AllowVectorExport="True" Left="0" Top="0" Width="283,46475" Height="18,89765" DataSet="frxdbEstadosBrasil" DataSetName="EstadosBrasil" Frame.Typ="0" Text="[EstadosBrasil.&#34;ESTADO_ID&#34;] - [EstadosBrasil.&#34;ESTADO_NOME&#34;]"/>
       <TfrxMemoView Name="EstadosBrasilREGIAO_ID" IndexTag="1" Align="baRight" AllowVectorExport="True" Left="430,86642" Top="0" Width="287,24428" Height="18,89765" DataSet="frxdbEstadosBrasil" DataSetName="EstadosBrasil" Frame.Typ="0" Text="[EstadosBrasil.&#34;REGIAO_ID&#34;] - [EstadosBrasil.&#34;REGIAO_NOME&#34;]"/>
     </TfrxMasterData>
-    <TfrxPageFooter Name="PageFooter1" FillType="ftBrush" FillGap.Top="0" FillGap.Left="0" FillGap.Bottom="0" FillGap.Right="0" Frame.Typ="0" Height="15,11811024" Left="0" Top="721,89023" Width="718,1107">
+    <TfrxPageFooter Name="PageFooter1" FillType="ftBrush" FillGap.Top="0" FillGap.Left="0" FillGap.Bottom="0" FillGap.Right="0" Frame.Typ="0" Height="18,8976377952756" Left="0" Top="721,89023" Width="718,1107">
       <TfrxLineView Name="Line1" AllowVectorExport="True" Left="0" Top="0" Width="718,1107" Height="0" Color="0" Frame.Typ="4"/>
+      <TfrxMemoView Name="mmoVariables" Align="baLeft" AllowVectorExport="True" Left="0" Top="0" Width="196,53546236" Height="18,89765" Frame.Typ="0" Text="[DATA_HORA_IMPRESSAO]"/>
     </TfrxPageFooter>
   </TfrxReportPage>
   <TfrxReportPage Name="pgCharts" HGuides.Text="" VGuides.Text="" PaperWidth="210" PaperHeight="297" PaperSize="9" LeftMargin="10" RightMargin="10" TopMargin="10" BottomMargin="5" ColumnWidth="0" ColumnPositions.Text="" Frame.Typ="0" MirrorMode="0">

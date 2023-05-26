@@ -181,6 +181,9 @@ begin
             lfrxMemoView.Memo.Clear;
             lfrxMemoView.Memo.Text := Format('Aplicativo de Exemplo: %s', ['VCL HORSE']);
           end;
+
+          //VARIÁVEIS DO RELATÓRIO
+          pfrxReport.Variables.Variables['DATA_HORA_IMPRESSAO'] := QuotedStr(DateTimeToStr(Now));
         end).
         Execute; //PROCESSAMENTO DO RELATÓRIO
     except
