@@ -5,8 +5,8 @@
 ![Forks](https://img.shields.io/github/forks/antoniojmsjr/FastReportExport.svg?style=flat-square)
 ![Issues](https://img.shields.io/github/issues/antoniojmsjr/FastReportExport.svg?style=flat-square&color=blue)</br>
 ![Compatibility](https://img.shields.io/badge/Compatibility-VCL,%20Firemonkey,%20DataSnap,%20Horse,%20RDW,%20RADServer-3db36a?style=flat-square)
-![Delphi Supported Versions](https://img.shields.io/badge/Delphi%20Supported%20Versions-XE7%20and%20above-3db36a?style=flat-square)
-![Fastreport Supported Versions](https://img.shields.io/badge/Fast%20Report%20Supported%20Versions-5.1.5%20and%20above-3db36a?style=flat-square)
+![Delphi Supported Versions](https://img.shields.io/badge/Delphi%20Supported%20Versions-XE7%20and%20higher-3db36a?style=flat-square)
+![Fastreport Supported Versions](https://img.shields.io/badge/Fast%20Report%20Supported%20Versions-5.1.5%20and%20higher-3db36a?style=flat-square)
 
 # FastReportExport
 
